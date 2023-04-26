@@ -29,7 +29,16 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	// y = initialVolume * ln(1 + (tau/x))
+	/*
+		y = A * ln(1 + (B/x))
+		Where:
+
+			y: is the amplitude value of the signal at a given time.
+			A: is the maximum amplitude value of the signal (i.e., the amplitude value before the fade out begins).
+			B: is a constant that controls how quickly the amplitude decreases. A higher value of B will produce a faster fade out.
+			x: is the time elapsed from the beginning of the fade out to the current moment.
+
+	*/
 	tau := getTau(initialVolume, fadeOutTime)
 	volume := initialVolume
 
