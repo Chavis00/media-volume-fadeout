@@ -10,12 +10,12 @@ Where:
 - t: is the time elapsed from the beginning of the fade out to the current moment
 - tau: is a time constant that determines the rate at which the quantity exponentially decreases over time.
 
-## Instalation
+## Installation
 Clone this repository
 ```bash
 git clone https://github.com/Chavis00/media-volume-fadeout.git
 ```
-cd into directory
+cd into the directory
 ```bash
 cd media-volume-fadeout
 ```
@@ -26,13 +26,14 @@ go build fadeout
 ```
 
 ## Run
-This is an example to run a 30 seconds fadeout
+Here is an example of how to run a 30-second fadeout:
 ```bash
 ./fadeout -s 30
 ```
-If not -s flag, time will be 15s by default
+If the -s flag is not specified, the time will default to 15 seconds.
 
-Now you can add a new shortcut in your operative sistem to execute
+Now, you can add a new shortcut in your operating system to execute:
+
 ```bash
 ./path/to/fadeout -s {time-in-seconds}
 ``` 
