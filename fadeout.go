@@ -29,16 +29,7 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	/*
-		y = A * ln(1 + (B/x))
-		Where:
 
-			y: is the amplitude value of the signal at a given time.
-			A: is the maximum amplitude value of the signal (i.e., the amplitude value before the fade out begins).
-			B: is a constant that controls how quickly the amplitude decreases. A higher value of B will produce a faster fade out.
-			x: is the time elapsed from the beginning of the fade out to the current moment.
-
-	*/
 	tau := getTau(initialVolume, fadeOutTime)
 	volume := initialVolume
 
@@ -60,8 +51,6 @@ func main() {
 func getCurrentVolume() (float64, error) {
 	// Run the "amixer" command with the "-D pulse" flag to specify the default pulseaudio sound card
 	cmd := exec.Command("amixer", "-D", "pulse", "get", "Master")
-
-	// Retrieve the output of the command
 	output, err := cmd.Output()
 	if err != nil {
 		return 0, err
@@ -73,7 +62,6 @@ func getCurrentVolume() (float64, error) {
 	volumeStr = strings.TrimSpace(volumeStr)
 	volumeStr = strings.TrimRight(volumeStr, "%")
 
-	// Parse the volume level as an integer
 	volume, err := strconv.ParseFloat(volumeStr, 64)
 	if err != nil {
 		return 0, err
@@ -83,6 +71,7 @@ func getCurrentVolume() (float64, error) {
 }
 
 func setVolume(volume float64) error {
+	// Set current volume of OS
 	volumeStr := fmt.Sprintf("%d%%", int(volume))
 	cmd := exec.Command("amixer", "-D", "pulse", "sset", "Master", volumeStr)
 	err := cmd.Run()
@@ -94,18 +83,29 @@ func setVolume(volume float64) error {
 	return nil
 }
 func exponentialFadeOut(initialVolume, elapsed, tau float64) float64 {
+	/*
+		v(t) = v0 * e^(-t/tau)
+		where:
+			v(t): is the specific value of volume in t .
+			v0: is the volume at the beggining of the fadeout.
+			t: is the time elapsed from the beginning of the fade out to the current moment
+			tau: is a time constant that determines the rate at which the quantity exponentially decreases over time.
+	*/
 	return initialVolume * math.Exp(-elapsed/tau)
 }
 
 func getTau(initialVolume, totalTime float64) float64 {
+	// tau depends on total time expected and the initial volume
 	return totalTime / math.Log(initialVolume)
 }
 func fadeOut(volume, initialVolume, tau float64, elapsed time.Duration) {
+	// Calculate an set new volume
 	volume = exponentialFadeOut(initialVolume, elapsed.Seconds(), tau)
 	setVolume(volume)
 }
 
 func toggleMediaReproduction() {
+	// Pause media using XF86AudioPlay key and wait 1 sec to return
 	pause := exec.Command("xdotool", "key", "XF86AudioPlay")
 	err := pause.Run()
 	if err != nil {
@@ -115,6 +115,7 @@ func toggleMediaReproduction() {
 }
 
 func endFadeOut(initialVolume float64) {
+	// Toggle to pause and set initial volume
 	toggleMediaReproduction()
 	setVolume(initialVolume)
 }
