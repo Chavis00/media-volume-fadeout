@@ -1,6 +1,9 @@
 # Introduction
 A simple fadeout for pause media in linux, using exponential fadeout 
+```math
 v(t) = v0 * e^(-t/tau)
+
+```
 Where:
 - v(t): is the specific value of volume in t .
 - v0: is the volume at the beggining of the fadeout.
