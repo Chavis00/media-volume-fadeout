@@ -35,5 +35,5 @@ If the -s flag is not specified, the time will default to 15 seconds.
 Now, you can add a new shortcut in your operating system to execute:
 
 ```bash
-./path/to/fadeout -s {time-in-seconds}
+/path/to/fadeout -s {time-in-seconds}
 ``` 
